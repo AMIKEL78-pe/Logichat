@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/Omar/Downloads/logistica-whatsapp.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LogiChat · Analizador de órdenes de transporte desde WhatsApp</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--pri:#0f766e;--pri2:#14b8a6;--priS:#ccfbf1;
+--amb:#b45309;--ambS:#fef3c7;--blu:#1d4ed8;--bluS:#dbeafe;--grn:#15803d;--grnS:#dcfce7;--red:#b91c1c;--redS:#fee2e2;--sh:0 1px 2px rgba(15,23,42,.06),0 4px 16px rgba(15,23,42,.05);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1120;--card:#111a2e;--ink:#e2e8f0;--mut:#94a3b8;--line:#1e293b;--priS:#134e4a;--ambS:#422006;--bluS:#172554;--grnS:#052e16;--redS:#450a0a;--pri2:#2dd4bf}}
+:root[data-theme="dark"]{--bg:#0b1120;--card:#111a2e;--ink:#e2e8f0;--mut:#94a3b8;--line:#1e293b;--priS:#134e4a;--ambS:#422006;--bluS:#172554;--grnS:#052e16;--redS:#450a0a;--pri2:#2dd4bf}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+header{background:linear-gradient(120deg,#0f766e,#115e59 60%,#134e4a);color:#fff;padding:18px 24px}
+header .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font-size:20px;margin:0}header p{margin:2px 0 0;opacity:.8;font-size:13px}
+.logo{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:22px}
+.wrap{max-width:1500px;margin:0 auto}
+main{padding:20px 24px 60px}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:9px;cursor:pointer;font:inherit;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.btn:hover{border-color:var(--pri2)}.btn.pri{background:var(--pri);color:#fff;border-color:var(--pri)}.btn.pri:hover{filter:brightness(1.1)}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25)}
+.spacer{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh)}
+#drop{border:2px dashed var(--line);border-radius:16px;padding:46px 20px;text-align:center;background:var(--card);cursor:pointer;transition:.2s}
+#drop.over{border-color:var(--pri2);background:var(--priS)}
+#drop .ic{font-size:44px}#drop h2{margin:8px 0 4px;font-size:18px}#drop p{margin:0;color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.kpi{padding:14px 16px}.kpi .l{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}.kpi .v{font-size:26px;font-weight:700;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{padding:14px 16px}.panel h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;color:var(--mut);letter-spacing:.04em}
+.bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13px}.bar .n{width:42%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .t{flex:1;height:8px;background:var(--line);border-radius:5px;overflow:hidden}.bar .t i{display:block;height:100%;background:var(--pri2);border-radius:5px}
+.bar .c{width:28px;text-align:right;font-weight:600}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px;overflow-x:auto}
+.tab{padding:10px 14px;border:0;background:none;color:var(--mut);font:inherit;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab.on{color:var(--pri);border-color:var(--pri)}
+.tab .b{background:var(--line);border-radius:20px;padding:1px 8px;font-size:12px;margin-left:4px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;padding:12px;align-items:end}
+.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut);font-weight:600}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri2);outline-offset:-1px}
+.tw{overflow-x:auto;border-top:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--card);text-align:left;padding:10px;border-bottom:1px solid var(--line);color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;cursor:pointer;user-select:none}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;max-width:260px}
+tr.r:hover td{background:var(--bg);cursor:pointer}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.Pendiente{background:var(--ambS);color:var(--amb)}.En.tránsito,.Entransito{background:var(--bluS);color:var(--blu)}.Completado{background:var(--grnS);color:var(--grn)}
+.tag{display:inline-block;background:var(--priS);color:var(--pri);border-radius:6px;padding:1px 6px;font-size:11px;margin:1px 2px 1px 0;font-weight:600}
+.tag.w{background:var(--redS);color:var(--red)}
+.mut{color:var(--mut)}.sm{font-size:12px}.nowrap{white-space:nowrap}
+td select{padding:3px 6px;font-size:12px}
+.msg{padding:10px 14px;border-bottom:1px solid var(--line)}.msg .h{font-size:12px;color:var(--mut)}.msg .x{white-space:pre-wrap;word-break:break-word}
+.hidden{display:none!important}
+.modalbg{position:fixed;inset:0;background:rgba(2,6,23,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{width:min(820px,100%);max-height:90vh;overflow:auto;padding:20px}
+.dl{display:grid;grid-template-columns:170px 1fr;gap:6px 14px;font-size:13px}.dl dt{color:var(--mut);font-weight:600}.dl dd{margin:0}
+.dl dd input{width:100%;padding:5px 8px}
+.raw{background:var(--bg);border-radius:10px;padding:10px;margin-top:6px;white-space:pre-wrap;font-size:12px;word-break:break-word}
+.tl{border-left:2px solid var(--pri2);margin:8px 0 0 6px;padding-left:12px}.tl div{margin:6px 0;font-size:13px}
+.empty{padding:40px;text-align:center;color:var(--mut)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;z-index:60;font-size:13px}
+.conf{width:44px;height:6px;background:var(--line);border-radius:4px;display:inline-block;vertical-align:middle;overflow:hidden}.conf i{display:block;height:100%;background:var(--pri2)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="logo">🚚</div>
+  <div><h1>LogiChat</h1><p>Extrae órdenes de transporte desde chats exportados de WhatsApp</p></div>
+  <div class="spacer"></div>
+  <button class="btn ghost" id="btnCfg">⚙️ Configuración</button>
+  <button class="btn ghost hidden" id="btnNew">📂 Cargar otro chat</button>
+</div></header>
+
+<main class="wrap">
+  <section id="upload">
+    <label id="drop">
+      <div class="ic">📥</div>
+      <h2>Arrastra aquí el chat exportado de WhatsApp</h2>
+      <p>Archivo <b>.txt</b> o el <b>.zip</b> tal como lo exporta WhatsApp · se procesa 100% en tu navegador, nada se sube a internet</p>
+      <input type="file" id="file" accept=".txt,.zip,text/plain" hidden="">
+    </label>
+  </section>
+
+  <section id="dash" class="hidden">
+    <div class="mut sm" id="meta"></div>
+    <div class="kpis">
+      <div class="card kpi"><div class="l">Órdenes detectadas</div><div class="v" id="kTot">0</div></div>
+      <div class="card kpi"><div class="l">Pendientes</div><div class="v" style="color:var(--amb)" id="kPen">0</div></div>
+      <div class="card kpi"><div class="l">En tránsito</div><div class="v" style="color:var(--blu)" id="kTra">0</div></div>
+      <div class="card kpi"><div class="l">Completadas</div><div class="v" style="color:var(--grn)" id="kCom">0</div></div>
+      <div class="card kpi"><div class="l">Clientes distintos</div><div class="v" id="kCli">0</div></div>
+      <div class="card kpi"><div class="l">Msjs. no estructurados</div><div class="v mut" id="kGen">0</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card panel"><h3>Clientes más frecuentes</h3><div id="topCli"></div></div>
+      <div class="card panel"><h3>Transportistas asignados</h3><div id="topCho"></div></div>
+      <div class="card panel"><h3>Tipos de equipo</h3><div id="topEq"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="tabs" style="padding:0 12px">
+        <button class="tab on" data-t="ord">Órdenes de transporte <span class="b" id="bOrd">0</span></button>
+        <button class="tab" data-t="gen">Registros no estructurados / Conversación general <span class="b" id="bGen">0</span></button>
+      </div>
+      <div id="tOrd">
+        <div class="filters">
+          <label class="f">Buscar<input id="fQ" placeholder="equipo, dirección, activo…" style="width:200px"></label>
+          <label class="f">Cliente<select id="fCli"></select></label>
+          <label class="f">Estado<select id="fEst"><option value="">Todos</option><option>Pendiente</option><option>En tránsito</option><option>Completado</option></select></label>
+          <label class="f">Transportista<select id="fCho"></select></label>
+          <label class="f">Desde<input type="date" id="fD1"></label>
+          <label class="f">Hasta<input type="date" id="fD2"></label>
+          <button class="btn" id="fClr">Limpiar</button>
+          <div class="spacer"></div>
+          <button class="btn" id="exCsv">⬇️ CSV</button>
+          <button class="btn pri" id="exXls">⬇️ Excel</button>
+        </div>
+        <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div>
+        <div class="empty hidden" id="noRows">No hay órdenes con estos filtros.</div>
+      </div>
+      <div id="tGen" class="hidden">
+        <div class="filters">
+          <label class="f">Buscar<input id="gQ" style="width:240px"></label>
+          <label class="f">Categoría<select id="gCat"></select></label>
+          <label class="f">Usuario<select id="gUsr"></select></label>
+          <div class="spacer"></div>
+          <span class="mut sm">Haz clic en un mensaje para convertirlo en orden manualmente</span>
+        </div>
+        <div id="genList" style="max-height:640px;overflow:auto;border-top:1px solid var(--line)"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modalbg hidden" id="mdl"><div class="card modal" id="mdlBody"></div></div>
+
+<script id="parser">
+/* =====================================================================
+   MOTOR DE ANÁLISIS (sin dependencias, sin DOM) — reutilizable en Node
+   ===================================================================== */
+const DEFAULT_CFG = {
+  dateOrder: 'auto',                       // auto | DMY | MDY
+  transportKeywords: 'transporte, delivery, chofer, motorizado, courier, conductor',
+  baseName: 'Almacén COSEINCO',
+  clients: 'BISA, CONSORCIO, LLORENTE & CUENCA, OCEANIKA, CRONOS, BRITANICO, UNIFE, NAVITRANSO, SAN CHARBEL, ZAIDA',
+  aliases: 'B.=BISA\nC.=CONSORCIO',        // prefijos usados por los choferes en sus evidencias
+  agencies: 'Cruz del Sur, Shalom, Olva, Marvisur, Oltursa, Movil Bus, Flores, Civa, Tepsa, Excluciva',
+  suppliers: 'MEMORY KINGS, COOLBOX, IMPRESORAS SAC, IMPRESORAS S.A.C, DELTRON, INTCOMEX, CONECTA'
+};
+
+const norm = s => (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' y ').replace(/\s+/g,' ').trim();
+const list = s => (s||'').split(/[,\n]/).map(x=>x.trim()).filter(Boolean);
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const cap = s => s.replace(/\S+/g,w=>w.length>3||/^[a-z]/i.test(w)?w[0].toUpperCase()+w.slice(1).toLowerCase():w);
+
+const HEAD = [
+  // iOS:  [9/1/26, 8:35:52 AM] Nombre: mensaje
+  /^\[(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([ap]\.?\s?m\.?)?\]\s+([^:]{1,80}?):\s?([\s\S]*)$/i,
+  // Android: 01/09/26, 08:35 - Nombre: mensaje
+  /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([ap]\.?\s?m\.?)?\s+[-–]\s+([^:]{1,80}?):\s?([\s\S]*)$/i
+];
+const HEAD_SYS = /^\[?(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4}),?\s+\d{1,2}:\d{2}/;
+
+function splitMessages(text){
+  const lines = text.replace(/\r/g,'').replace(/[\u200e\u200f\u202a-\u202e\ufeff]/g,'').replace(/[\u202f\u00a0]/g,' ').split('\n');
+  const raw = []; let cur = null;
+  for(const ln of lines){
+    let m = null; for(const re of HEAD){ m = ln.match(re); if(m) break; }
+    if(m){ cur = {a:+m[1], b:+m[2], y:+m[3], h:+m[4], mi:+m[5], s:+(m[6]||0), ap:(m[7]||'').replace(/[\s.]/g,'').toLowerCase(), user:m[8].trim(), text:m[9]}; raw.push(cur); }
+    else if(HEAD_SYS.test(ln)){ cur = null; }
+    else if(cur){ cur.text += '\n' + ln; }
+  }
+  return raw;
+}
+
+function resolveDates(raw, order){
+  let o = order;
+  if(o==='auto'){ o = raw.some(r=>r.a>12) ? 'DMY' : raw.some(r=>r.b>12) ? 'MDY' : 'DMY'; }
+  raw.forEach((r,i)=>{
+    let d = o==='DMY'? r.a : r.b, mo = o==='DMY'? r.b : r.a, y = r.y<100? 2000+r.y : r.y, h = r.h;
+    if(r.ap==='pm' && h<12) h+=12; if(r.ap==='am' && h===12) h=0;
+    r.date = new Date(y, mo-1, d, h, r.mi, r.s); r.idx = i;
+  });
+  return o;
+}
+
+/* ---------- diccionarios ---------- */
+const EQUIP = [
+  ['Laptop', /\b(laptops?|notebooks?|macbook|mac)\b/],
+  ['CPU / PC', /\b(cpus?|pcs?|desktops?|computadora[s]?|all in one|aio|torre)\b/],
+  ['Servidor', /\b(servidor(es)?|server)\b/],
+  ['Impresora', /\b(impresora[s]?|multifuncional(es)?|plotter)\b/],
+  ['UPS / Estabilizador', /\b(ups|estabilizador(es)?|baterias?)\b/],
+  ['Rack', /\b(racks?|gabinete[s]?)\b/],
+  ['Monitor', /\b(monitor(es)?|pantalla[s]?|tv)\b/],
+  ['Red / Comunicaciones', /\b(switch|router|antena|starlink|access point|ap|firewall|modem)\b/],
+  ['Consumible / Repuesto', /\b(toner|tinta|caja (de )?(mmto|mantenimiento)|rodillos?|kit|disco|ssd|memoria|cargador(es)?|fuente|repuesto)\b/],
+  ['Accesorio', /\b(mochila[s]?|mouse|teclado[s]?|cable[s]?|docking|audifonos|camara)\b/],
+  ['Kit de bienvenida', /\b(cajas? de bienvenida|bienvenida)\b/],
+  ['Documentos', /\b(documentos?|guia[s]?|factura[s]?|sobre[s]?|contrato)\b/],
+  ['Equipo (genérico)', /\b(equipo[s]?)\b/]
+];
+const NUMW = {un:1,una:1,uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10};
+const CITIES = ['huancayo','cuzco','cusco','arequipa','marcona','ica','piura','trujillo','chiclayo','ayacucho','tacna','puno','juliaca','iquitos','pucallpa','cajamarca','huaraz','chimbote','nazca','pisco','tarapoto','huanuco','moquegua','tumbes','chincha','cañete','huaral','huacho','talara','abancay','jauja','la oroya','cerro de pasco','ilo'];
+const DISTRICTS = ['miraflores','san isidro','surco','santiago de surco','surquillo','san borja','la molina','lince','jesus maria','pueblo libre','magdalena','san miguel','barranco','chorrillos','ate','sjl','san juan de lurigancho','smp','san martin de porres','los olivos','independencia','comas','callao','breña','la victoria','cercado','lima','san luis','santa anita','villa el salvador','vmt','chaclacayo','lurin','carabayllo','rimac','el agustino','bellavista'];
+const ADDR_RE = /\b(av\.?|avda\.?|avenida|jr\.?|jiron|ca\.?|calle|psje\.?|pasaje|mz\.?|urb\.?|carretera|prolongacion|prol\.|alameda|malecon|ovalo|km\.?)\s+\S/i;
+const PHONE_RE = /(?:\+?51[\s-]?)?\b9\d{2}[\s-]?\d{3}[\s-]?\d{3}\b/g;
+const DOC_RES = [/fact\.?\s*[A-Z]{1,2}\d{1,3}-\d{3,}/gi, /gu[ií]a\s*[A-Z]{1,2}\d{1,3}-\d{2,}/gi, /\bS0\d{4}\b/g, /\bactivo\s*:?\s*A\d{3,5}\b/gi, /\bPC\d{2}-\d{3,}\b/gi, /\bT\d{6,}\b/g, /\bclave\s*=?\s*\d{3,6}\b/gi];
+const TAGS = [
+  ['Urgente', /\b(urgente|urgencia|urge|lo antes posible|prioridad)\b/],
+  ['Frágil', /\b(fragil|cuidado|delicado)\b/],
+  ['Requiere estibador', /\b(estibador|estiba|cargador de apoyo|pesado)\b/],
+  ['Rotación', /\b(rotacion|rotaciones|cambio de equipo)\b/],
+  ['Ingresante', /\b(ingresante|nuevo ingreso|bienvenida)\b/],
+  ['Reparación / Revisión', /\b(reparad[ao]|reparacion|revision|diagnostico|falla|fallo)\b/],
+  ['Mantenimiento', /\b(mantenimiento|mmto)\b/],
+  ['Garantía', /\b(garantia)\b/],
+  ['Alquiler', /\b(alquiler)\b/],
+  ['Compra a proveedor', /\b(compra de|compra en)\b/],
+  ['Firma de guía', /\b(firma|firmar|guia firmada|cargo)\b/],
+  ['Envío por agencia', /\b(cruz del sur|shalom|olva|marvisur|oltursa|agencia)\b/],
+  ['Backup / Datos', /\b(backup|respaldo)\b/]
+];
+const MOTIVOS = ['Rotación','Ingresante','Reparación / Revisión','Mantenimiento','Compra a proveedor','Garantía','Alquiler'];
+
+const ORDER_KW = /\b(su apoyo|tu apoyo|apoyo para|para llevar|llevar (un|una|el|la|los|las|\d)|recoger|recojo|recoge[ :]|recepcionar|retirar|traer(lo|la)?|retornar|devolver|entregar|enviar|envio de|compra de|asignacion de|traslad\w*|despacho|por recoger|pide revision|solicita)\b/;
+const EVID_KW = /(^|\n)\s*(asignacion|asignaciones|recepcion|dejando|envio|entregado|recogido)\b|\bclave\s*=?\s*\d{3,6}\b|\bllega (manana|hoy|el|en|pasado|al|lunes|martes|miercoles|jueves|viernes|sabado)/;
+const ACK_KW = /^(ok|okey|okay|listo|ya|voy|de acuerdo|claro|perfecto|ahi paso|paso a|en camino|en ruta|saliendo|recogi|entregue|ya entregue|ya recogi|hola,? ok|buenos dias,? ok|buenas tardes,? ok|si)\b/;
+const PICKUP_KW = /\b(recoger|recojo|recoge|recepcionar|retirar|traer|traerlo|traerla|compra de|compra en|pide revision|por recoger|devolucion)\b/;
+
+function compileCfg(cfg){
+  const C = {...DEFAULT_CFG, ...cfg};
+  C.tKw = list(C.transportKeywords).map(norm);
+  C.clientList = list(C.clients).map(c=>({name:c.toUpperCase(), n:norm(c)}));
+  C.aliasMap = (C.aliases||'').split('\n').map(l=>l.split('=')).filter(p=>p.length===2).map(([k,v])=>({k:k.trim(),v:v.trim().toUpperCase()}));
+  C.agencyList = list(C.agencies).map(a=>({name:a, n:norm(a)}));
+  C.supplierList = list(C.suppliers).map(a=>norm(a));
+  return C;
+}
+
+function cleanText(t, users){
+  let x = t;
+  x = x.replace(/[A-Za-z0-9+\/=]{60,}/g,' ');                     // basura base64
+  x = x.replace(/<(imagen|video|audio|sticker|gif|documento) omitid[oa]>[^\n]*?(\.pdf|\.jpg|\.png|\.docx?|\.xlsx?)?/gi,' ');
+  x = x.replace(/\[Reenviado\]/gi,' ').replace(/Este mensaje fue eliminado\.?|Se eliminó este mensaje\.?/gi,' ');
+  for(const u of users) x = x.split('@'+u).join(' ');
+  x = x.replace(/@[\p{L}\p{Emoji_Presentation}\d_.]+/gu,' ');
+  return x.replace(/[ \t]{3,}/g,'\n').replace(/[ \t]+/g,' ').replace(/ *\n */g,'\n').trim();
+}
+const segments = t => t.split(/\n|\s{3,}/).map(s=>s.trim()).filter(Boolean);
+
+function findClient(text, C, learned){
+  const n = ' '+norm(text)+' ';
+  // 1) referencia entre paréntesis tipo (Bisa-S06052) o (Navitranso)
+  let m = text.match(/\(\s*([A-Za-zÁÉÍÓÚÑáéíóúñ&. ]{3,30}?)\s*[-–\s]\s*S\d{4,}\s*\)/) || text.match(/\(\s*([A-Za-zÁÉÍÓÚÑáéíóúñ&.]{3,25})\s*\)/);
+  if(m && !C.agencyList.some(a=>norm(m[1]).includes(a.n))){
+    const hit = [...C.clientList, ...learned].find(c=>norm(m[1])===c.n || norm(m[1]).includes(c.n));
+    return hit ? hit.name : m[1].trim().toUpperCase();
+  }
+  // 2) diccionario de clientes (configurados + aprendidos)
+  let best=null;
+  for(const c of [...C.clientList, ...learned]){
+    const i = n.indexOf(' '+c.n+' ') >= 0 ? n.indexOf(' '+c.n+' ') : (c.n.length>=5? n.indexOf(c.n):-1);
+    if(i>=0 && (!best || i<best.i)) best={i,name:c.name};
+  }
+  if(best) return best.name;
+  // 3) prefijos de alias (B. Nombre → BISA)
+  for(const a of C.aliasMap){ if(new RegExp('(^|\\n)\\s*'+esc(a.k)+'\\s*[A-Za-zÁÉÍÓÚÑáéíóúñ]','m').test(text)) return a.v; }
+  return '';
+}
+function learnClients(msgs, C){
+  const found = new Map();
+  const stop = new Set(['CPU','PC','ACTIVO','LLEGA','MAC','UPS','RUC','SAC','SA','OK','BI','LAPTOP','LAPTOPS','OFICINA','SEDE','EQUIPO','LIMA','COSEINCO','INGRESANTE','INGRESANTES','HDMI','MOTIVO','NOMBRE','FIN','URGENTE']);
+  for(const m of msgs){
+    if(m.isTransporter) continue;
+    const t = m.clean;
+    let r = t.match(/\(\s*([A-Za-zÁÉÍÓÚÑáéíóúñ&. ]{3,30}?)\s*[-–\s]\s*S\d{4,}\s*\)/);
+    if(r) found.set(norm(r[1]), r[1].trim().toUpperCase());
+    for(const x of t.matchAll(/\b(?:de|a|en|para) +([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ&.]{3,}(?: +[A-ZÁÉÍÓÚÑ&.]{2,}){0,2})\b/g)){
+      const v = x[1].trim(); const nv = norm(v);
+      if(stop.has(v) || C.agencyList.some(a=>a.n===nv) || C.supplierList.includes(nv)) continue;
+      if(/^\d/.test(v)) continue;
+      found.set(nv, v);
+    }
+  }
+  return [...found].filter(([n])=>!C.clientList.some(c=>c.n===n)).map(([n,name])=>({n,name}));
+}
+
+function extractEquipment(text){
+  const n = norm(text);
+  let desc = '';
+  const cm = text.match(/(?:compra|asignaci[oó]n|cambio)\s+de\s+([^()\n]{3,90})/i);
+  if(cm) desc = cm[1].replace(/\s{2,}.*/,'').trim();
+  const types = [], items = [];
+  for(const [t,re] of EQUIP){
+    const g = new RegExp('(?:\\b(\\d{1,3}|un|una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\\s+(?:cajas?\\s+(?:con|de)\\s+)?)?'+re.source,'g');
+    let m; let got=false;
+    while((m=g.exec(n))){ got=true; items.push((m[1]? (NUMW[m[1]]||+m[1])+' ':'')+m[0].replace(/^(\d{1,3}|un|una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\s+/,'')); }
+    if(got && !(t==='Equipo (genérico)' && types.length)) types.push(t);
+  }
+  const uniq = [...new Set(items)].filter((v,i,a)=>!a.some((o,j)=>j!==i&&o.includes(v)&&o.length>v.length));
+  if(!desc) desc = uniq.slice(0,4).join(', ');
+  const serial = (text.match(/\b(PC\d{2}-\d{3,}|A\d{4}|S0\d{4})\b/g)||[]);
+  return {tipo: types.slice(0,2).join(' + '), desc: desc ? cap(desc) : '', serial};
+}
+
+function extractAddress(text){
+  const segs = segments(text);
+  const a = segs.filter(s=>ADDR_RE.test(s) && s.length<160).map(s=>s.replace(PHONE_RE,'').replace(/^\W+/,'').trim());
+  if(a.length) return a[0];
+  const n = norm(text);
+  const d = DISTRICTS.find(x=>new RegExp('\\b'+x+'\\b').test(n));
+  return d ? cap(d) : '';
+}
+function extractSchedule(text){
+  const segs = segments(text), out=[];
+  for(const s of segs){
+    const n = norm(s);
+    if(/\b(l\s?-\s?[svd]|lunes|martes|miercoles|jueves|viernes|sabado)\b.*\d/.test(n) || /refrigerio/.test(n)) out.push(s);
+    else if(/\b(antes de(l| las)?|despues de|a partir de|hasta las|entre las)\s+(\d|medio)/.test(n)) out.push(s.match(/(antes de(l| las)?|despu[eé]s de|a partir de|hasta las|entre las)[^.,\n]*/i)?.[0]||s);
+    else if(/\b(hoy|manana|en la tarde|en la manana|medio ?dia)\b/.test(n) && !/^llega/.test(n) && s.length<90 && !/buenos dias|buenas tardes/.test(n)) out.push(s);
+  }
+  return [...new Set(out)].slice(0,3).join(' · ').replace(/\s+/g,' ');
+}
+function extractEta(text){ const m = text.match(/ll[eg]+a[^\n]{2,50}/i) || text.match(/llwga[^\n]{2,50}/i); return m? m[0].trim():''; }
+function extractDocs(text){ const s=new Set(); DOC_RES.forEach(re=>(text.match(re)||[]).forEach(v=>s.add(v.replace(/\s+/g,' ').trim()))); return [...s]; }
+function extractContact(text){
+  const segs = segments(text); let name='', phone='';
+  for(let i=0;i<segs.length;i++){
+    const ph = segs[i].match(PHONE_RE);
+    if(ph){ phone = ph[0].replace(/\s|-/g,''); const rest = segs[i].replace(PHONE_RE,'').replace(/[:\-,]/g,' ').trim();
+      name = rest.length>2 && rest.length<50 ? rest : (i>0 && segs[i-1].length<45 && !ADDR_RE.test(segs[i-1]) && !/apoyo|llevar|recoger/i.test(segs[i-1]) ? segs[i-1] : ''); break; }
+  }
+  if(!name){ const m = text.match(/\b(?:coordinar con|contacto|atiende|entregar a|recibe)\s*:?\s*(?:la |el )?(?:srta\.?|sra\.?|sr\.?|ing\.?)?\s*([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?)/); if(m) name=m[1]; }
+  return {name: name? cap(name):'', phone};
+}
+function extractTags(text){ const n=norm(text); return TAGS.filter(([,re])=>re.test(n)).map(([t])=>t); }
+function extractAgency(text, C){
+  const n = norm(text).replace(/[.,;]/g,'').replace(/\s+/g,' '); const ag = C.agencyList.find(a=>n.includes(a.n));
+  const city = CITIES.find(c=>new RegExp('\\b'+norm(c)+'\\b').test(n));
+  return {agency: ag? ag.name:'', city: city? cap(city):''};
+}
+function personTokens(text){
+  return new Set((norm(text).match(/[a-z]{4,}/g)||[]).filter(w=>!/^(para|apoyo|equipo|laptop|asignacion|recepcion|activo|clave|llega|manana|buenos|buenas|tardes|dias|favor|porfavor|coseinco|transporte|delivery|envio|cargador|rotacion|alquiler|ingresante|dejando|tarde|hola|gracias|llevar|recoger|sobre|desde|hasta|como|este|esta|equipos|laptops|cajas|caja)$/.test(w)));
+}
+
+function parseChat(text, cfg={}){
+  const C = compileCfg(cfg);
+  const raw = splitMessages(text);
+  const dateOrder = resolveDates(raw, C.dateOrder);
+  const users = [...new Set(raw.map(r=>r.user))].sort((a,b)=>b.length-a.length);
+  const isT = u => C.tKw.some(k=>norm(u).includes(k));
+  const msgs = raw.map(r=>({...r, isTransporter:isT(r.user), clean:cleanText(r.text, users), hasMedia:/<(imagen|video|documento) omitid/i.test(r.text)}));
+  msgs.forEach(m=>{ m.n = norm(m.clean); m.mentions = users.filter(u=>m.text.includes('@'+u)); });
+  const learned = learnClients(msgs, C);
+
+  const orders = [], general = [], pendingCard = {};
+  let seq = 0;
+  const shortName = u => u.replace(/[^\p{L}\s]/gu,'').replace(/\b(delivery|transporte|coseinco|oficina principal|ventas)\b/gi,'').replace(/\s+/g,' ').trim() || u;
+
+  const newOrder = (m, base={})=>{
+    const eq = extractEquipment(m.clean), ad = extractAddress(m.clean), ag = extractAgency(m.clean, C), ct = extractContact(m.clean), tags = extractTags(m.clean);
+    const pickup = PICKUP_KW.test(m.n) && !/\b(entregar|llevar)\b.*\ba\b/.test(m.n.split('compra de')[1]||'');
+    let origen, destino;
+    const supplier = /compra de/.test(m.n) ? (m.clean.split(/compra de/i)[0].replace(/\s{2,}/g,' ').trim().slice(0,70)) : '';
+    if(pickup){ origen = [supplier, ad].filter(Boolean).join(' — ') || ''; destino = C.baseName; }
+    else { origen = C.baseName; destino = ad || (ag.agency? `Agencia ${ag.agency}${ag.city?' → '+ag.city:''}` : ''); }
+    const o = {
+      id: 'OT-'+String(++seq).padStart(4,'0'), fecha: m.date, solicitante: m.user,
+      cliente: findClient(m.clean, C, learned), tipoEquipo: eq.tipo, equipo: eq.desc,
+      origen, destino, direccion: pickup ? 'Recojo' : 'Entrega',
+      horario: extractSchedule(m.clean), eta: '', estado: 'Pendiente', chofer: '',
+      contacto: ct.name, telefono: ct.phone, documentos: extractDocs(m.clean),
+      agencia: ag.agency, ciudad: ag.city, motivo: MOTIVOS.find(t=>tags.includes(t))||'',
+      observaciones: tags, mentions: m.mentions.filter(isT), eventos: [{fecha:m.date, txt:`Solicitud de ${m.user}`}],
+      raw: [m], cierre: null, sinSolicitud: false, confianza: 0, ...base
+    };
+    const rec = m.clean.match(/\b[Rr]ecoge\b\s*:?\s*([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?: [A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?)/);
+    if(rec){ o.chofer = cap(rec[1]); o.eventos.push({fecha:m.date, txt:`Asignado a ${o.chofer}`}); }
+    if(pickup){ const mm = m.clean.match(/\b(?:entregar|llevar)\b[^.\n]*?\ba\s+([A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑ& -]{3,40})/); if(mm){ o.destino = mm[1].trim(); o.direccion='Recojo y entrega'; } }
+    if(pendingCard[m.user] && m.date - pendingCard[m.user].date < 15*60e3){ const v=pendingCard[m.user]; o.contacto ||= v.name; o.telefono ||= v.phone; o.raw.unshift(v.msg); delete pendingCard[m.user]; }
+    scoreConf(o); orders.push(o); return o;
+  };
+  const fill = (o, m)=>{
+    const eq = extractEquipment(m.clean), ad = extractAddress(m.clean), ct = extractContact(m.clean);
+    if(ad){ if(o.direccion==='Recojo' && (!o.origen || o.origen===o.solicitante)) o.origen = ad; else if(o.direccion==='Entrega' && (!o.destino || !ADDR_RE.test(o.destino))) o.destino = ad; }
+    const rd = m.clean.match(/\b(?:entregar|llevar)\b[^\n]*?\ba\s+([A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑ&]{3,}(?: [A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑ&]+){0,3})/);
+    if(rd && o.direccion!=='Entrega'){ o.destino = rd[1].trim(); o.direccion='Recojo y entrega'; }
+    o.cliente ||= findClient(m.clean, C, learned); o.equipo ||= eq.desc; o.tipoEquipo ||= eq.tipo;
+    o.contacto ||= ct.name; o.telefono ||= ct.phone; o.horario ||= extractSchedule(m.clean);
+    o.documentos = [...new Set([...o.documentos, ...extractDocs(m.clean)])];
+    o.observaciones = [...new Set([...o.observaciones, ...extractTags(m.clean)])];
+    o.raw.push(m); scoreConf(o);
+  };
+  function scoreConf(o){ o.confianza = Math.min(100, ['cliente','equipo','origen','destino','horario','contacto'].filter(k=>o[k]&&o[k]!==C.baseName).length*17 + (o.chofer?10:0)); }
+
+  const matchEvidence = (m)=>{
+    const cli = findClient(m.clean, C, learned), toks = personTokens(m.clean), eq = extractEquipment(m.clean).tipo;
+    const kindN = m.n; const isRecep = /recepcion|recogido/.test(kindN), isAsig = /asignacion|dejando|entregado/.test(kindN);
+    let best=null, bs=0;
+    for(const o of orders){
+      if(o.estado==='Completado' || o.sinSolicitud) continue;
+      const dt = m.date - o.fecha; if(dt<0 || dt>5*864e5) continue;
+      let s = 0;
+      if(cli && o.cliente && cli===o.cliente) s+=4;
+      const ot = personTokens(o.raw.map(r=>r.clean).join(' ')); let hits=0; toks.forEach(t=>{ if(ot.has(t)) hits++; }); s += Math.min(hits,3)*3;
+      if(eq && o.tipoEquipo && eq.split(' + ').some(t=>o.tipoEquipo.includes(t))) s+=1;
+      if(o.mentions.includes(m.user) || o.chofer && norm(m.user).includes(norm(o.chofer))) s+=1;
+      if(o.direccion==='Recojo y entrega' || isRecep && o.direccion==='Recojo' || isAsig && o.direccion==='Entrega') s+=2; else if(isRecep||isAsig) s-=2;
+      s -= dt/864e5;            // preferir la más reciente
+      if(s>bs){ bs=s; best=o; }
+    }
+    return bs>=5 ? best : null;
+  };
+
+  for(let i=0;i<msgs.length;i++){
+    const m = msgs[i];
+    if(/BEGIN:VCARD/.test(m.text)){
+      const fn = (m.text.match(/FN:([^\n]+)/)||[])[1]||'', tel = (m.text.match(/TEL[^:]*:([+\d\s]+)/)||[])[1]||'';
+      pendingCard[m.user] = {name:fn.trim(), phone:tel.replace(/\s/g,''), date:m.date, msg:m};
+      const prev = [...orders].reverse().find(o=>o.solicitante===m.user && m.date-o.fecha < 15*60e3);
+      if(prev){ prev.contacto ||= fn.trim(); prev.telefono ||= tel.replace(/\s/g,''); prev.raw.push(m); delete pendingCard[m.user]; }
+      continue;
+    }
+    if(!m.clean){ general.push({...m, cat: m.hasMedia?'Multimedia sin texto':'Vacío'}); continue; }
+
+    if(m.isTransporter){
+      if(EVID_KW.test(m.n)){
+        const kind = /recepcion|recogido/.test(m.n)?'Recepción':/dejando/.test(m.n)?'Entrega en oficina':/asignacion|entregado/.test(m.n)?'Asignación (entrega)':'Envío por agencia';
+        const transit = kind==='Envío por agencia' || (/clave|llega/.test(m.n) && !/recepcion/.test(m.n));
+        const eta = extractEta(m.clean), ag = extractAgency(m.clean, C);
+        let o = matchEvidence(m);
+        if(!o){
+          o = newOrder(m, {sinSolicitud:true});
+          o.solicitante = m.user + ' (registro directo)';
+          o.direccion = /recepcion|dejando/.test(m.n) ? 'Recojo' : 'Entrega';
+          if(o.direccion==='Recojo'){ o.origen = extractAddress(m.clean) || o.cliente || 'Cliente'; o.destino = C.baseName; }
+          else { o.origen = C.baseName; o.destino = extractAddress(m.clean) || (ag.agency||ag.city ? `Agencia ${ag.agency||'—'}${ag.city?' → '+ag.city:''}` : (o.cliente||'')); }
+          o.eventos = [];
+          o.observaciones = [...new Set([...o.observaciones,'Sin solicitud previa en chat'])];
+        } else { o.raw.push(m); }
+        o.chofer = shortName(m.user);
+        if(ag.agency && !o.agencia){ o.agencia = ag.agency; }
+        if(eta) o.eta = eta;
+        o.documentos = [...new Set([...o.documentos, ...extractDocs(m.clean)])];
+        o.estado = transit ? 'En tránsito' : 'Completado';
+        if(o.estado==='Completado') o.cierre = m.date;
+        o.eventos.push({fecha:m.date, txt:`${kind} registrada por ${m.user}${eta?' · '+eta:''}`});
+        scoreConf(o); continue;
+      }
+      if(ACK_KW.test(m.n) && m.n.length<120){
+        const o = [...orders].reverse().find(o=>!o.chofer && !o.sinSolicitud && m.date-o.fecha < 6*36e5 && m.date>=o.fecha);
+        if(o){ o.chofer = shortName(m.user); o.eventos.push({fecha:m.date, txt:`Confirmado por ${m.user}: “${m.clean.slice(0,60)}”`}); if(/en camino|en ruta|saliendo/.test(m.n)) o.estado='En tránsito'; o.raw.push(m); continue; }
+      }
+      if(/\b(en camino|en ruta|saliendo|llegando)\b/.test(m.n)){
+        const o = [...orders].reverse().find(o=>o.chofer && norm(m.user).includes(norm(o.chofer).split(' ')[0]) && o.estado==='Pendiente');
+        if(o){ o.estado='En tránsito'; o.eventos.push({fecha:m.date, txt:`En ruta: “${m.clean.slice(0,60)}”`}); o.raw.push(m); continue; }
+      }
+      general.push({...m, cat:'Transportista · conversación'}); continue;
+    }
+
+    // ---- solicitante ----
+    const isQuestion = /\?\s*$/.test(m.clean) && !ADDR_RE.test(m.clean) && m.clean.length<160;
+    const hasEquip = EQUIP.slice(0,-1).some(([,re])=>re.test(m.n)) || /\bequipo/.test(m.n);
+    const recent = [...orders].reverse().find(o=>o.solicitante===m.user && !o.sinSolicitud && m.date-o.fecha < 5*60e3);
+    if(recent && !isQuestion && ORDER_KW.test(m.n) && !extractEquipment(m.clean).tipo){ fill(recent, m); recent.observaciones=[...new Set([...recent.observaciones,...extractTags(m.clean)])]; continue; }
+    if(!isQuestion && ORDER_KW.test(m.n) && (hasEquip || ADDR_RE.test(m.clean) || findClient(m.clean,C,learned) || extractDocs(m.clean).length || /\b(productos?|paquetes?|bultos?|cajas?|pedido)\b/.test(m.n)) && m.clean.length>15){ newOrder(m); continue; }
+    // complementos de la orden previa (dirección / teléfono / cliente reenviados aparte)
+    const prev = [...orders].reverse().find(o=>o.solicitante===m.user && m.date-o.fecha < 20*60e3);
+    if(prev && !isQuestion && (ADDR_RE.test(m.clean) || PHONE_RE.test(m.clean) || /^[A-ZÁÉÍÓÚÑ &.,]{4,}$/.test(m.clean.split('\n')[0]))){ PHONE_RE.lastIndex=0; fill(prev, m); continue; }
+    PHONE_RE.lastIndex=0;
+    // datos operativos sueltos (alias B./C. Nombre) → registros de lista
+    general.push({...m, cat: isQuestion?'Seguimiento / consulta':(/^(gracias|ok|listo|buenos|buenas|hola)/.test(m.n)?'Cortesía':'Conversación general')});
+  }
+  orders.forEach(o=>{ if(!o.cliente && o.raw.length>1) o.cliente = findClient(o.raw.map(r=>r.clean).join('\n'), C, learned); if(!o.destino) o.destino = o.cliente || '—'; if(!o.origen) o.origen = o.direccion!=='Entrega' && o.cliente ? o.cliente : '—'; scoreConf(o); });
+  return {orders, general, total: msgs.length, users, dateOrder, learned: learned.map(l=>l.name)};
+}
+if(typeof module!=='undefined') module.exports = {parseChat, DEFAULT_CFG};
+</script>
+
+<script>
+/* =====================================================================
+   INTERFAZ
+   ===================================================================== */
+const $ = s=>document.querySelector(s);
+let CFG = {...DEFAULT_CFG}, DATA = null, SRC = '', FNAME = '', sortKey = 'fecha', sortDir = 1;
+try{ const s = localStorage.getItem('logichat.cfg'); if(s) CFG = {...CFG, ...JSON.parse(s)}; }catch(e){}
+
+const fmt = d => d ? d.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+d.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit',hour12:false}) : '';
+const iso = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const h = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast = t=>{ const d=document.createElement('div'); d.className='toast'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); };
+
+/* ---------- carga ---------- */
+const drop = $('#drop'), fi = $('#file');
+['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',ev=>{ const f=ev.dataTransfer.files[0]; if(f) load(f); });
+fi.addEventListener('change',()=>fi.files[0]&&load(fi.files[0]));
+$('#btnNew').onclick=()=>{ $('#dash').classList.add('hidden'); $('#upload').classList.remove('hidden'); $('#btnNew').classList.add('hidden'); fi.value=''; };
+
+async function load(f){
+  try{
+    FNAME = f.name;
+    SRC = /\.zip$/i.test(f.name) ? await txtFromZip(await f.arrayBuffer()) : await f.text();
+    run();
+  }catch(e){ console.error(e); toast('No se pudo leer el archivo: '+e.message); }
+}
+// Lector ZIP nativo (DecompressionStream) — sin librerías externas
+async function txtFromZip(buf){
+  const v = new DataView(buf), u8 = new Uint8Array(buf);
+  let eo = -1; for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-66000);i--){ if(v.getUint32(i,true)===0x06054b50){eo=i;break;} }
+  if(eo<0) throw new Error('ZIP inválido');
+  let p = v.getUint32(eo+16,true), n = v.getUint16(eo+10,true), entries=[];
+  for(let k=0;k<n;k++){
+    const method=v.getUint16(p+10,true), csize=v.getUint32(p+20,true), nl=v.getUint16(p+28,true), el=v.getUint16(p+30,true), cl=v.getUint16(p+32,true), lo=v.getUint32(p+42,true);
+    const name = new TextDecoder().decode(u8.subarray(p+46,p+46+nl)); entries.push({name,method,csize,lo}); p += 46+nl+el+cl;
+  }
+  const e = entries.find(x=>/\.txt$/i.test(x.name) && !/__MACOSX/.test(x.name)); if(!e) throw new Error('El ZIP no contiene un .txt');
+  const start = e.lo + 30 + v.getUint16(e.lo+26,true) + v.getUint16(e.lo+28,true);
+  const data = u8.subarray(start, start+e.csize);
+  if(e.method===0) return new TextDecoder().decode(data);
+  if(typeof DecompressionStream==='undefined') throw new Error('Navegador sin soporte ZIP; descomprime y carga el .txt');
+  const ds = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  return await new Response(ds).text();
+}
+
+function run(){
+  const t0 = performance.now();
+  DATA = parseChat(SRC, CFG);
+  DATA.orders.sort((a,b)=>a.fecha-b.fecha);
+  $('#upload').classList.add('hidden'); $('#dash').classList.remove('hidden'); $('#btnNew').classList.remove('hidden');
+  $('#meta').textContent = `📄 ${FNAME} · ${DATA.total} mensajes de ${DATA.users.length} usuarios · formato de fecha ${DATA.dateOrder==='MDY'?'MM/DD/AA':'DD/MM/AA'} · procesado en ${Math.round(performance.now()-t0)} ms`;
+  buildFilters(); render();
+}
+
+/* ---------- filtros / tabla ---------- */
+const COLS = [
+  ['id','ID'],['fecha','Fecha / hora'],['solicitante','Solicitante'],['cliente','Cliente'],['tipoEquipo','Tipo equipo'],['equipo','Descripción'],
+  ['origen','Origen'],['destino','Destino'],['horario','Horario / ventana'],['estado','Estado'],['chofer','Transportista'],['observaciones','Observaciones'],['confianza','Confianza']
+];
+function opts(sel, vals, all){ const cur = sel.value; sel.innerHTML = `<option value="">${all}</option>`+vals.map(v=>`<option>${h(v)}</option>`).join(''); if(vals.includes(cur)) sel.value=cur; }
+function buildFilters(){
+  const o = DATA.orders;
+  opts($('#fCli'), [...new Set(o.map(x=>x.cliente||'(sin cliente)'))].sort(), 'Todos');
+  opts($('#fCho'), [...new Set(o.map(x=>x.chofer||'(sin asignar)'))].sort(), 'Todos');
+  opts($('#gCat'), [...new Set(DATA.general.map(x=>x.cat))].sort(), 'Todas');
+  opts($('#gUsr'), [...new Set(DATA.general.map(x=>x.user))].sort(), 'Todos');
+  if(o.length){ $('#fD1').min=$('#fD2').min=iso(o[0].fecha); $('#fD1').max=$('#fD2').max=iso(o[o.length-1].fecha); }
+}
+function filtered(){
+  const q = norm($('#fQ').value), cli=$('#fCli').value, est=$('#fEst').value, cho=$('#fCho').value, d1=$('#fD1').value, d2=$('#fD2').value;
+  return DATA.orders.filter(o=>{
+    if(cli && (o.cliente||'(sin cliente)')!==cli) return false;
+    if(est && o.estado!==est) return false;
+    if(cho && (o.chofer||'(sin asignar)')!==cho) return false;
+    if(d1 && iso(o.fecha)<d1) return false; if(d2 && iso(o.fecha)>d2) return false;
+    if(q && !norm([o.id,o.cliente,o.equipo,o.tipoEquipo,o.origen,o.destino,o.contacto,o.documentos.join(' '),o.raw.map(r=>r.clean).join(' ')].join(' ')).includes(q)) return false;
+    return true;
+  }).sort((a,b)=>{ let x=a[sortKey], y=b[sortKey]; if(Array.isArray(x)){x=x.join();y=y.join();} return (x>y?1:x<y?-1:0)*sortDir; });
+}
+function bars(el, map, max=6){
+  const arr = [...map].sort((a,b)=>b[1]-a[1]).slice(0,max), top = arr[0]?.[1]||1;
+  el.innerHTML = arr.length ? arr.map(([n,c])=>`<div class="bar"><span class="n" title="${h(n)}">${h(n)}</span><span class="t"><i style="width:${c/top*100}%"></i></span><span class="c">${c}</span></div>`).join('') : '<div class="mut sm">Sin datos</div>';
+}
+const count = (arr,f)=>arr.reduce((m,x)=>{ const k=f(x); if(k) m.set(k,(m.get(k)||0)+1); return m; }, new Map());
+function render(){
+  const rows = filtered();
+  $('#kTot').textContent = rows.length; $('#kPen').textContent = rows.filter(o=>o.estado==='Pendiente').length;
+  $('#kTra').textContent = rows.filter(o=>o.estado==='En tránsito').length; $('#kCom').textContent = rows.filter(o=>o.estado==='Completado').length;
+  $('#kCli').textContent = new Set(rows.map(o=>o.cliente).filter(Boolean)).size; $('#kGen').textContent = DATA.general.length;
+  bars($('#topCli'), count(rows,o=>o.cliente)); bars($('#topCho'), count(rows,o=>o.chofer||'(sin asignar)')); bars($('#topEq'), count(rows,o=>o.tipoEquipo.split(' + ')[0]));
+  $('#bOrd').textContent = rows.length; $('#bGen').textContent = DATA.general.length;
+  $('#thead').innerHTML = COLS.map(([k,l])=>`<th data-k="${k}">${l}${sortKey===k?(sortDir>0?' ▲':' ▼'):''}</th>`).join('');
+  $('#tbody').innerHTML = rows.map(o=>`<tr class="r" data-id="${o.id}">
+    <td class="nowrap"><b>${o.id}</b>${o.sinSolicitud?'<br><span class="tag w">registro directo</span>':''}</td>
+    <td class="nowrap">${fmt(o.fecha)}</td><td>${h(o.solicitante)}</td><td><b>${h(o.cliente)||'<span class="mut">—</span>'}</b></td>
+    <td>${h(o.tipoEquipo)||'—'}</td><td>${h(o.equipo)||'—'}</td>
+    <td>${h(o.origen)}</td><td>${h(o.destino)}${o.agencia&&!o.destino.includes(o.agencia)?`<div class="sm mut">vía ${h(o.agencia)}</div>`:''}</td>
+    <td class="sm">${h(o.horario)||'<span class="mut">—</span>'}${o.eta?`<div class="mut">⏱ ${h(o.eta)}</div>`:''}</td>
+    <td><select data-st="${o.id}" class="pill ${o.estado.replace(' ','')}">${['Pendiente','En tránsito','Completado'].map(s=>`<option ${s===o.estado?'selected':''}>${s}</option>`).join('')}</select></td>
+    <td>${h(o.chofer)||'<span class="mut">—</span>'}</td>
+    <td>${o.observaciones.map(t=>`<span class="tag ${/Urgente|Frágil|estibador|Sin solicitud/.test(t)?'w':''}">${h(t)}</span>`).join('')}</td>
+    <td><span class="conf" title="${o.confianza}% de campos detectados"><i style="width:${o.confianza}%"></i></span></td></tr>`).join('');
+  $('#noRows').classList.toggle('hidden', rows.length>0);
+  renderGen();
+}
+function renderGen(){
+  const q = norm($('#gQ').value), c=$('#gCat').value, u=$('#gUsr').value;
+  const g = DATA.general.filter(m=>(!c||m.cat===c)&&(!u||m.user===u)&&(!q||norm(m.text).includes(q)));
+  $('#genList').innerHTML = g.slice(0,1500).map(m=>`<div class="msg" data-g="${m.idx}" style="cursor:pointer"><div class="h">${fmt(m.date)} · <b>${h(m.user)}</b> · <span class="tag">${h(m.cat)}</span></div><div class="x">${h(m.text.length>600?m.text.slice(0,600)+'…':m.text)}</div></div>`).join('') || '<div class="empty">Sin mensajes</div>';
+}
+
+document.addEventListener('input',e=>{ if(['fQ','fD1','fD2'].includes(e.target.id)) render(); if(['gQ'].includes(e.target.id)) renderGen(); });
+document.addEventListener('change',e=>{
+  if(['fCli','fEst','fCho'].includes(e.target.id)) render();
+  if(['gCat','gUsr'].includes(e.target.id)) renderGen();
+  if(e.target.dataset.st){ const o=DATA.orders.find(x=>x.id===e.target.dataset.st); o.estado=e.target.value; o.eventos.push({fecha:new Date(),txt:'Estado cambiado manualmente a '+o.estado}); render(); }
+});
+$('#fClr').onclick=()=>{ ['fQ','fCli','fEst','fCho','fD1','fD2'].forEach(i=>$('#'+i).value=''); render(); };
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b)); $('#tOrd').classList.toggle('hidden',b.dataset.t!=='ord'); $('#tGen').classList.toggle('hidden',b.dataset.t!=='gen'); });
+$('#thead').onclick=e=>{ const k=e.target.closest('th')?.dataset.k; if(!k) return; sortDir = sortKey===k? -sortDir : 1; sortKey=k; render(); };
+$('#tbody').onclick=e=>{ if(e.target.tagName==='SELECT') return; const tr=e.target.closest('tr'); if(tr) detail(DATA.orders.find(o=>o.id===tr.dataset.id)); };
+$('#genList').onclick=e=>{ const d=e.target.closest('[data-g]'); if(!d) return; const i=+d.dataset.g, m=DATA.general.find(x=>x.idx===i);
+  if(confirm('¿Convertir este mensaje en una orden de transporte?')){
+    const o = {id:'OT-M'+String(DATA.orders.length+1).padStart(3,'0'), fecha:m.date, solicitante:m.user, cliente:'', tipoEquipo:'', equipo:m.clean.slice(0,80), origen:'', destino:'', direccion:'Entrega', horario:'', eta:'', estado:'Pendiente', chofer:'', contacto:'', telefono:'', documentos:[], agencia:'', ciudad:'', motivo:'', observaciones:['Creada manualmente'], mentions:[], eventos:[{fecha:m.date,txt:'Creada manualmente desde conversación'}], raw:[m], confianza:0};
+    DATA.orders.push(o); DATA.general = DATA.general.filter(x=>x!==m); buildFilters(); render(); detail(o);
+  } };
+
+/* ---------- detalle editable ---------- */
+const EDIT = [['cliente','Cliente'],['tipoEquipo','Tipo de equipo'],['equipo','Descripción del equipo'],['direccion','Tipo de movimiento'],['origen','Punto de partida'],['destino','Punto de llegada'],['horario','Horario / ventana'],['eta','Llegada estimada (ETA)'],['chofer','Transportista'],['agencia','Agencia de envío'],['contacto','Contacto en sitio'],['telefono','Teléfono'],['motivo','Motivo']];
+function detail(o){
+  $('#mdlBody').innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><h2 style="margin:0;font-size:18px">${o.id}</h2><span class="pill ${o.estado.replace(' ','')}">${o.estado}</span><div class="spacer"></div><button class="btn" id="mClose">Cerrar ✕</button></div>
+  <dl class="dl"><dt>Fecha / hora</dt><dd>${fmt(o.fecha)}</dd><dt>Solicitante</dt><dd>${h(o.solicitante)}</dd>
+  ${EDIT.map(([k,l])=>`<dt>${l}</dt><dd><input data-e="${k}" value="${h(o[k])}"></dd>`).join('')}
+  <dt>Documentos / códigos</dt><dd>${o.documentos.map(d=>`<span class="tag">${h(d)}</span>`).join('')||'—'}</dd>
+  <dt>Observaciones</dt><dd><input data-e="observaciones" value="${h(o.observaciones.join(', '))}"></dd></dl>
+  <h3 style="font-size:13px;margin:16px 0 0">Línea de tiempo</h3><div class="tl">${o.eventos.map(e=>`<div><span class="mut sm">${fmt(e.fecha)}</span> — ${h(e.txt)}</div>`).join('')}</div>
+  <h3 style="font-size:13px;margin:16px 0 0">Mensajes originales (${o.raw.length})</h3>${o.raw.map(r=>`<div class="raw"><b>${fmt(r.date)} · ${h(r.user)}</b>\n${h(r.text.slice(0,1200))}</div>`).join('')}`;
+  $('#mdl').classList.remove('hidden');
+  $('#mClose').onclick=()=>{ $('#mdl').classList.add('hidden'); buildFilters(); render(); };
+  $('#mdlBody').querySelectorAll('[data-e]').forEach(i=>i.oninput=()=>{ const k=i.dataset.e; o[k] = k==='observaciones'? i.value.split(',').map(s=>s.trim()).filter(Boolean) : i.value; });
+}
+$('#mdl').onclick=e=>{ if(e.target.id==='mdl'){ $('#mdl').classList.add('hidden'); buildFilters(); render(); } };
+
+/* ---------- configuración ---------- */
+$('#btnCfg').onclick=()=>{
+  $('#mdlBody').innerHTML = `<div style="display:flex;align-items:center;margin-bottom:12px"><h2 style="margin:0;font-size:18px">⚙️ Configuración del motor</h2><div class="spacer"></div><button class="btn" id="mClose">✕</button></div>
+  <dl class="dl">
+  <dt>Formato de fecha</dt><dd><select id="cDO"><option value="auto">Detectar automáticamente</option><option value="DMY">DD/MM/AA</option><option value="MDY">MM/DD/AA</option></select></dd>
+  <dt>Nombre de la base</dt><dd><input id="cBase" value="${h(CFG.baseName)}"></dd>
+  <dt>Palabras que identifican al transportista</dt><dd><input id="cT" value="${h(CFG.transportKeywords)}"><div class="mut sm">Se buscan en el nombre de contacto de WhatsApp</div></dd>
+  <dt>Clientes conocidos</dt><dd><textarea id="cCli" rows="3" style="width:100%">${h(CFG.clients)}</textarea>${DATA?`<div class="mut sm">Detectados automáticamente: ${h(DATA.learned.join(', ')||'—')}</div>`:''}</dd>
+  <dt>Alias de clientes (prefijos)</dt><dd><textarea id="cAl" rows="3" style="width:100%">${h(CFG.aliases)}</textarea><div class="mut sm">Uno por línea. Ej: <code>B.=BISA</code> → “B. Mario Saman” se asigna a BISA</div></dd>
+  <dt>Agencias de envío</dt><dd><input id="cAg" value="${h(CFG.agencies)}"></dd>
+  <dt>Proveedores</dt><dd><input id="cSu" value="${h(CFG.suppliers)}"><div class="mut sm">Se tratan como origen (no como cliente)</div></dd>
+  </dl><div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end"><button class="btn" id="cReset">Restaurar valores</button><button class="btn pri" id="cSave">Guardar y reprocesar</button></div>`;
+  $('#cDO').value = CFG.dateOrder; $('#mdl').classList.remove('hidden');
+  $('#mClose').onclick=()=>$('#mdl').classList.add('hidden');
+  $('#cReset').onclick=()=>{ CFG={...DEFAULT_CFG}; save(); };
+  $('#cSave').onclick=()=>{ CFG={dateOrder:$('#cDO').value, baseName:$('#cBase').value, transportKeywords:$('#cT').value, clients:$('#cCli').value, aliases:$('#cAl').value, agencies:$('#cAg').value, suppliers:$('#cSu').value}; save(); };
+  function save(){ try{ localStorage.setItem('logichat.cfg', JSON.stringify(CFG)); }catch(e){} $('#mdl').classList.add('hidden'); if(SRC) run(); toast('Configuración aplicada'); }
+};
+
+/* ---------- exportación ---------- */
+const EXP = [['ID','id'],['Fecha','f'],['Hora','hr'],['Solicitante','solicitante'],['Cliente','cliente'],['Tipo de equipo','tipoEquipo'],['Descripción equipo','equipo'],['Movimiento','direccion'],['Origen','origen'],['Destino','destino'],['Horario / ventana','horario'],['ETA','eta'],['Estado','estado'],['Transportista','chofer'],['Agencia','agencia'],['Ciudad destino','ciudad'],['Contacto','contacto'],['Teléfono','telefono'],['Motivo','motivo'],['Documentos','docs'],['Observaciones','obs'],['Fecha cierre','cie'],['Confianza %','confianza']];
+function expRows(){ return filtered().map(o=>({...o, f:iso(o.fecha), hr:o.fecha.toTimeString().slice(0,5), docs:o.documentos.join(' | '), obs:o.observaciones.join(' | '), cie:o.cierre?fmt(o.cierre):''})); }
+function download(name, content, type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }
+const stamp = ()=>new Date().toISOString().slice(0,10);
+$('#exCsv').onclick=()=>{
+  const q = v=>'"'+String(v??'').replace(/"/g,'""').replace(/\n/g,' ')+'"';
+  const csv = [EXP.map(e=>q(e[0])).join(','), ...expRows().map(r=>EXP.map(e=>q(r[e[1]])).join(','))].join('\r\n');
+  download(`ordenes_transporte_${stamp()}.csv`, '\ufeff'+csv, 'text/csv;charset=utf-8'); toast('CSV exportado');
+};
+$('#exXls').onclick=()=>{
+  const x = v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const row = (cells,st)=>'<Row>'+cells.map(c=>`<Cell${st?' ss:StyleID="h"':''}><Data ss:Type="${typeof c==='number'?'Number':'String'}">${x(c)}</Data></Cell>`).join('')+'</Row>';
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Styles><Style ss:ID="h"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#0F766E" ss:Pattern="Solid"/></Style></Styles><Worksheet ss:Name="Ordenes"><Table>${row(EXP.map(e=>e[0]),1)}${expRows().map(r=>row(EXP.map(e=>r[e[1]]))).join('')}</Table><WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel"><FreezePanes/><SplitHorizontal>1</SplitHorizontal><TopRowBottomPane>1</TopRowBottomPane></WorksheetOptions></Worksheet></Workbook>`;
+  download(`ordenes_transporte_${stamp()}.xls`, xml, 'application/vnd.ms-excel'); toast('Excel exportado');
+};
+</script>
+
+
+</body></html>
